@@ -2,6 +2,7 @@ from __future__ import print_function
 from yeelight import *
 import mlbgame
 import time
+import datetime
 
 
 def goal_light():
@@ -14,14 +15,29 @@ def goal_light():
         bulb.turn_off()
         time.sleep(1)
 
-run_history = 0
 
-while True:
-    day = mlbgame.day(2018, 5, 16, away='Astros', home='Astros')
-    game = day[0]
-    print(run_history)
-    if int(game.away_team_runs) > run_history:
-        print(game.away_team_runs)
-        run_history = game.away_team_runs
-        goal_light()
+def play_ball():
+    run_history = 0
+    while True:
+        now = datetime.datetime.now()
+        current_year = now.year
+        current_month = now.month
+        current_day = now.day
+        current_hour = now.hour
+        day = mlbgame.day(current_year, current_month, current_day, away='Blue Jays', home='Blue Jays')
+        game = day[0]
+        print(run_history)
+        if int(game.away_team_runs) > run_history:
+            print(game.away_team_runs)
+            run_history = game.away_team_runs
+            goal_light()
+        if int(current_hour) == 5:
+            run_history = 0
+        time.sleep(5)
+
+
+if __name__ == "__main__":
+    play_ball()
+
+
 
